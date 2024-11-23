@@ -1,0 +1,59 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" routerLink="">
+        <img src="assets/layout/images/logo.png" alt="logo">
+    </a>
+
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button" (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button class="layout-topbar-button calendar-btn">
+            <i class="pi pi-bell"></i>
+            <span>Calendario</span>
+        </button>
+        <button class="layout-topbar-button profile-btn" (click)="toggleProfileMenu()">
+            <img [src]="profileImage" alt="Perfil" class="profile-image" />
+            <span>Perfil</span>
+        </button>
+
+        <div *ngIf="isProfileMenuOpen" class="profile-menu">
+            <button 
+            pButton 
+            icon="pi pi-times" 
+            class="close-button p-button-text" 
+            (click)="closeProfileMenu()">
+        </button>
+            <div class="profile-header">
+                <img [src]="profileImage" alt="Perfil" class="profile-large-image" />
+                <h4>{{ userName }}</h4>
+                <p class="email">{{ userEmail }}</p>
+            </div>
+            <div class="profile-actions">
+                <button 
+                pButton 
+                label="Editar Perfil" 
+                class="p-button-custom p-button-block" 
+                icon="pi pi-user-edit" 
+                (click)="editProfile()">
+            </button>
+            <button 
+            pButton 
+            label="Cerrar Sesión" 
+            class="p-button-danger p-button-block" 
+            icon="pi pi-power-off" 
+            (click)="logout()">
+        </button>
+            </div>
+        </div>
+        <button class="layout-topbar-button settings-btn" [routerLink]="'/documentation'">
+            <i class="pi pi-cog"></i>
+            <span>Settings</span>
+        </button>
+    </div>
+    
+</div>

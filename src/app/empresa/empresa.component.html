@@ -1,0 +1,140 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table 
+                #dt 
+                [value]="empresas" 
+                [paginator]="true" 
+                [rows]="5" 
+                [tableStyle]="{ 'min-width': '50rem' }"
+                [rowsPerPageOptions]="[5, 10, 20]" 
+                [globalFilterFields]="['razon_social', 'sector', 'ruc', 'direccion', 'representante_legal', 'estado']"
+                responsiveLayout="scroll" 
+                [selection]="selectedEmpresas" 
+                selectionMode="multiple" 
+                [(selection)]="selectedEmpresas" 
+                dataKey="id" 
+                (selectionChange)="onSelectionChange()">
+                
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center gap-3">
+                        <div class="flex flex-wrap gap-2">
+                            <p-splitButton label="Nueva Empresa" icon="pi pi-plus" class="p-button-success" (onClick)="showDialogCreate()" [model]="menuItems" severity="success"></p-splitButton>
+                            <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedEmpresas()" [disabled]="!selectedEmpresas || selectedEmpresas.length === 0"></button>
+                        </div>
+                        <h5 class="text-center">Manage Empresas</h5>
+                        <div class="flex align-items-center">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." 
+                                    class="w-full sm:w-auto" />
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Razón Social <p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
+                        <th pSortableColumn="ruc">RUC <p-sortIcon field="ruc"></p-sortIcon></th>
+                        <th pSortableColumn="direccion">Dirección <p-sortIcon field="direccion"></p-sortIcon></th>
+                        <th pSortableColumn="representante_legal">Representante Legal <p-sortIcon field="representante_legal"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th>Acción</th>
+                    </tr>
+                </ng-template>
+                
+                <ng-template pTemplate="body" let-empresa>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="empresa"></p-tableCheckbox>
+                        </td>
+                        <td>{{ empresa.id }}</td>
+                        <td>{{ empresa.razon_social }}</td>
+                        <td>{{ empresa.sector }}</td>
+                        <td>{{ empresa.ruc }}</td>
+                        <td>{{ empresa.direccion }}</td>
+                        <td>{{ empresa.representante_legal }}</td>
+                        <td>
+                            <span [class]="'product-badge status-' + (empresa.estado ? empresa.estado.toLowerCase() : '')">{{ empresa.estado }}</span>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="showDialogEdit(empresa.id)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="showDialogDelete(empresa)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="{{titulo}}" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <div class="p-fluid">
+        <div class="p-field">
+            <label for="razon_social">Razón Social</label>
+            <input id="razon_social" type="text" pInputText [(ngModel)]="empresa.razon_social" required />
+        </div>
+
+        <div class="p-field">
+            <label for="sector">Sector</label>
+            <input id="sector" type="text" pInputText [(ngModel)]="empresa.sector" required />
+        </div>
+
+        <div class="p-field">
+            <label for="ruc">RUC</label>
+            <input id="ruc" type="text" pInputText [(ngModel)]="empresa.ruc" required />
+        </div>
+
+        <div class="p-field">
+            <label for="direccion">Dirección</label>
+            <input id="direccion" type="text" pInputText [(ngModel)]="empresa.direccion" required />
+        </div>
+
+        <div class="p-field">
+            <label for="representante_legal">Representante Legal</label>
+            <input id="representante_legal" type="text" pInputText [(ngModel)]="empresa.representante_legal" required />
+        </div>
+
+        <div class="p-field">
+            <label for="estado">Estado</label>
+            <input id="estado" type="text" pInputText [(ngModel)]="empresa.estado" required />
+        </div>
+    </div>
+    <p-footer>
+        <button pButton icon="pi pi-times" label="Cancelar" (click)="limpiar()"></button>
+        <button pButton icon="pi pi-check" label="{{opc}}" (click)="opcion()"></button>
+    </p-footer>
+</p-dialog>
+
+<p-dialog [(visible)]="deleteEmpresaDialog" header="Confirmar Eliminación" [modal]="true" [style]="{width: '450px'}" appendTo="body">
+    <div class="flex flex-column align-items-center justify-content-center text-center">
+        <i class="pi pi-exclamation-triangle mb-3" style="font-size: 2rem; color: #FFA726"></i>
+        <span>¿Estás seguro de que deseas eliminar a <b>{{ empresa.razon_social }}</b>?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="deleteEmpresaDialog = false"></button>
+        <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-danger" (click)="confirmDelete(empresa)"></button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="deleteEmpresasDialog" header="Confirmar Eliminación" [modal]="true" [style]="{width: '450px'}" appendTo="body">
+    <div class="flex flex-column align-items-center justify-content-center text-center">
+        <i class="pi pi-exclamation-triangle mb-3" style="font-size: 2rem; color: #FFA726"></i>
+        <span>¿Estás seguro de que deseas eliminar a las <b>{{ selectedEmpresas.length }}</b> empresas seleccionadas?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="deleteEmpresasDialog = false"></button>
+        <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-danger" (click)="confirmDeleteSelected()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

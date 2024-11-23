@@ -1,0 +1,202 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$primeng-sakai-primary: mat.define-palette(mat.$indigo-palette);
+$primeng-sakai-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$primeng-sakai-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$primeng-sakai-theme: mat.define-light-theme((
+  color: (
+    primary: $primeng-sakai-primary,
+    accent: $primeng-sakai-accent,
+    warn: $primeng-sakai-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($primeng-sakai-theme);
+/* Estilos generales para todos los botones */
+/* Estilos generales para todos los botones */
+.layout-topbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1b2a5d00; /* Azul oscuro por defecto */
+  color: white;
+  border-radius: 8px; /* Bordes redondeados */
+  width: 100%; /* Asegura un ancho consistente */
+  height: 50px; /* Asegura una altura consistente */
+  padding: 0.5rem 1rem; /* Espaciado interno */
+  margin: 0.5rem 0; /* Espaciado entre botones */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  border: none; /* Sin bordes adicionales */
+}
+
+.layout-topbar-button:hover {
+  background-color: #142045; /* Azul más oscuro para el hover */
+  transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
+}
+
+/* Estilo para el botón del calendario */
+.calendar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el contenido horizontal y verticalmente */
+  background-color: #1b2a5d; /* Azul oscuro */
+  color: white; /* Texto blanco */
+  border: none; /* Sin bordes */
+  border-radius: 50%; /* Forma circular */
+  width: 50px; /* Ancho del botón */
+  height: 50px; /* Alto del botón */
+  padding: 0; /* Elimina espacios internos */
+  font-size: 18px; /* Ajusta el tamaño del icono */
+  transition: transform 0.3s ease, background-color 0.3s ease; /* Animación para hover */
+}
+
+.calendar-btn:hover {
+  background-color: #162145; /* Azul más oscuro al pasar el mouse */
+  transform: scale(1.1); /* Aumenta ligeramente el tamaño al pasar el mouse */
+}
+
+/* Asegura que los iconos se escalen correctamente */
+.calendar-btn i {
+  font-size: 20px; /* Ajusta el tamaño del icono */
+}
+
+/* Botón de perfil con imagen */
+.profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #1b2a5d; /* Mismo azul oscuro */
+  color: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.profile-btn:hover {
+  background-color: #142045;
+}
+
+.profile-image {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%; /* Imagen circular */
+  object-fit: cover; /* Ajuste de imagen */
+}
+
+.profile-menu {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem; /* Más espacio interno */
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  z-index: 1000;
+  width: 240px; /* Ancho fijo para consistencia */
+  text-align: center; /* Centra todo el contenido */
+}
+
+/* Botón de cerrar */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Mueve el botón hacia la derecha */
+  background: none;
+  color: #333; /* Color del icono */
+  font-size: 1rem;
+}
+
+.close-button:hover {
+  color: #1b2a5d; /* Color al pasar el mouse */
+  background: none;
+}
+
+
+/* Encabezado del menú */
+.profile-header {
+  text-align: center;
+  margin-bottom: 1.5rem; /* Espaciado uniforme */
+}
+
+.profile-large-image {
+  width: 80px; /* Tamaño mayor para consistencia */
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 0.8rem;
+  object-fit: cover;
+}
+
+/* Nombre del usuario */
+.profile-header h4 {
+  font-size: 1.2rem;
+  color: #333; /* Color oscuro para buena visibilidad */
+  margin: 0.5rem 0; /* Espaciado superior e inferior */
+}
+
+/* Correo del usuario */
+.profile-header .email {
+  font-size: 0.9rem;
+  color: #555; /* Gris oscuro para mejor legibilidad */
+  margin-bottom: 1.5rem; /* Espaciado para separar botones */
+}
+
+.p-button-custom {
+  background-color: #1b2a5d; /* Color personalizado */
+  border: none;
+  color: white;
+}
+
+.p-button-custom:hover {
+  background-color: #162345; /* Color más oscuro al pasar el mouse */
+  color: white;
+}
+
+.profile-actions .p-button {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.profile-actions .p-button-block {
+  width: 100%; 
+}
+
+/* Botón de ajustes */
+.settings-btn {
+  background-color: #1b2a5d; /* Azul oscuro */
+  color: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  transition: background-color 0.3s ease;
+}
+
+.settings-btn:hover {
+  background-color: #142045; /* Azul más oscuro */
+}
+
+///////////////////////////////////////////////////////////////////////

@@ -1,0 +1,145 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+                 <p-table #dt [value]="personas" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '3rem' }"
+                [rowsPerPageOptions]="[5, 10, 20]" [globalFilterFields]="['nombre', 'apellido', 'dni', 'correo', 'telefono', 'estado']"
+                responsiveLayout="scroll" [selection]="selectedPersonas" selectionMode="multiple" [(selection)]="selectedPersonas" dataKey="id" (selectionChange)="onSelectionChange()" >
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center gap-3">
+                        <div class="flex flex-wrap gap-2">
+                             <p-splitButton label="Nuevo" icon="pi pi-plus" class="p-button-success" (onClick)="showDialogCreate()"   [model]="menuItems" severity="success" ></p-splitButton>
+                            <button pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger"  (click)="deleteSelectedPersonas()" [disabled]="!selectedPersonas || selectedPersonas.length === 0"></button>
+                        </div>
+                        <h5 class="text-center">Manage Personas</h5>
+                        <div class="flex align-items-center">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..." 
+                                    class="w-full sm:w-auto" />
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+                        <th pSortableColumn="apellido">Apellido <p-sortIcon field="apellido"></p-sortIcon></th>
+                        <th pSortableColumn="dni">DNI <p-sortIcon field="dni"></p-sortIcon></th>
+                        <th pSortableColumn="correo">Correo <p-sortIcon field="correo"></p-sortIcon></th>
+                        <th pSortableColumn="telefono">Teléfono <p-sortIcon field="telefono"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th>Acción</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-persona>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="persona"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">ID</span>
+                            {{ persona.id }}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Nombre</span>
+                            {{ persona.nombre }}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Apellido</span>
+                            {{ persona.apellido }}
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">DNI</span>
+                            {{ persona.dni }}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Correo</span>
+                            {{ persona.correo }}
+                        </td>
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Teléfono</span>
+                            {{ persona.telefono }}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Estado</span>
+                            <span [class]="'product-badge status-' + (persona.estado ? persona.estado.toLowerCase() : '')">{{ persona.estado }}</span>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-warning mr-2" (click)="showDialogEdit(persona.id)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="showDialogDelete(persona)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>            
+            </div>
+        </div>
+    </div> 
+            <p-dialog header="{{titulo}}" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+                <div class="p-fluid">
+                    <div class="p-field">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" type="text" pInputText [(ngModel)]="persona.nombre" required />
+                    </div>
+
+                    <div class="p-field">
+                        <label for="apellido">Apellido</label>
+                        <input id="apellido" type="text" pInputText [(ngModel)]="persona.apellido" required />
+                    </div>
+
+                    <div class="p-field">
+                        <label for="dni">DNI</label>
+                        <input id="dni" type="text" pInputText [(ngModel)]="persona.dni" required />
+                    </div>
+
+                    <div class="p-field">
+                        <label for="correo">Correo</label>
+                        <input id="correo" type="email" pInputText [(ngModel)]="persona.correo" required />
+                    </div>
+
+                    <div class="p-field">
+                        <label for="telefono">Teléfono</label>
+                        <input id="telefono" type="text" pInputText [(ngModel)]="persona.telefono" required />
+                    </div>
+
+                    <div class="p-field">
+                        <label for="estado">Estado</label>
+                        <input id="estado" type="text" pInputText [(ngModel)]="persona.estado" required />
+                    </div>
+                </div>
+                <p-footer>
+                    <button pButton icon="pi pi-times" label="Cancelar" (click)="limpiar()"></button>
+                    <button pButton icon="pi pi-check" label="{{opc}}" (click)="opcion()"></button>
+                </p-footer>
+            </p-dialog>
+
+            <p-dialog [(visible)]="deletePersonaDialog" header="Confirmar Eliminación" [modal]="true" [style]="{width: '450px'}" appendTo="body">
+                <div class="flex flex-column align-items-center justify-content-center text-center">
+                  <i class="pi pi-exclamation-triangle mb-3" style="font-size: 2rem; color: #FFA726"></i>
+                  <span>¿Estás seguro de que deseas eliminar a <b>{{ persona.nombre }}</b>?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                  <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="deletePersonaDialog = false"></button>
+                  <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-danger" (click)="confirmDelete(persona)"></button>
+                </ng-template>
+              </p-dialog>
+              
+              <p-dialog [(visible)]="deletePersonasDialog" header="Confirmar Eliminación" [modal]="true" [style]="{width: '450px'}" appendTo="body">
+                <div class="flex flex-column align-items-center justify-content-center text-center">
+                  <i class="pi pi-exclamation-triangle mb-3" style="font-size: 2rem; color: #FFA726"></i>
+                  <span>¿Estás seguro de que deseas eliminar a las <b>{{ selectedPersonas.length }}</b> personas seleccionadas?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                  <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="deletePersonasDialog = false"></button>
+                  <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-danger" (click)="confirmDeleteSelected()"></button>
+                </ng-template>
+              </p-dialog>
+
+            <p-toast></p-toast> 
